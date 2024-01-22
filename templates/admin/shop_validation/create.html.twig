@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Validation d'une boutique{% endblock %}
+
+{% block body %}
+<!-- Main Content -->
+<main class="flex-shrink-0 mb-5">
+  <!-- Header-->
+  <header class="bg-dark">
+    <div class="pb-5">
+      <div class="text-center">
+          <h1 class="fw-bolder text-white m-0">Validation d'une boutique !</h1>
+      </div>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="col-md-7 m-auto col-lg-8">
+      {{ form_start(form) }}
+        <div class="needs-validation row g-3 mb-4">
+          <!--div class="col-12">
+            <div class="form-floating has-validation">
+              {#{form_widget(form.shop)}}
+              <label for="shopValidation_shop">Boutique:</label>
+              <div class="invalid-feedback">
+                  {{form_errors(form.shop)}#}
+              </div>
+            </div>
+          </div-->
+
+          <div class="col-sm-6 col-md-12 mb-3">
+            <div class="">
+              <label>Visibile:</label>
+              {{form_widget(form.visibility)}}
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-12 mb-3">
+            <div class="">
+              <label>Décision:</label>
+              {{form_widget(form.decision)}}
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-floating has-validation">
+              {{form_widget(form.description)}}
+              <label for="shopValidation_description">Description:</label>
+              <div class="invalid-feedback">
+                {{form_errors(form.description)}}.
+              </div>
+            </div>
+          </div>
+          <div class="form-group text-center">
+              <input type="submit" class="btn btn-primary text-white w-50">
+          </div>
+      {{ form_end(form) }}
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}6myshop -- Boutiques {% for p in products[:1] %}{{ p.shop.category.name }} - {{ p.sousCategory.name }}{% endfor %}{% endblock %}
+
+{% block body %}
+    <main class="flex-shrink-0 pb-5">
+        <!-- Header-->
+        <header class="bg-dark mb-5">
+            <div class="pb-5">
+                <div class="text-center">
+                    {% if products %}
+                    <h1 class="fw-bolder text-white m-0">
+                        {% for p in products[:1] %}{{ p.shop.category.name }} - {{ p.sousCategory.name }}{% endfor %}
+                    </h1>
+                    {% else %}
+                    <h1 class="fw-bolder text-white m-0">Ooops !!!</h1>
+                    {% endif %}
+                </div>
+            </div>
+        </header><!-- End Header-->
+        <div class="container">
+            {% if products %}
+                <div class="product">
+                    <div class="product-card">
+                        {% for p in products %}{% if p.onSale %}
+                        <div class="card shadow">
+                            <a class="item-link" href="{{ path('app_product_detail', {'categorySlug' : p.sousCategory.slug, 'productSlug' : p.slug, 'productId': p.id, 'shopSlug': p.shop.slug, 'cityId' : p.shop.city.id}) }}">
+                                <!-- Sale badge-->
+                            <div class="badge bg-dark">{% if p.firstPrice %}Solde{% endif %}</div>
+                                <!-- Product image-->
+                                <img class="card-img-top" src="{% for picture in p.images[:1] %}{{ asset('build/images/upload/product/' ~ picture.urlName) }}{% endfor %}" alt="image_{{ p.name }}" />
+                                <!-- Product details-->
+                                <div class="card-body">
+                                    <!-- Product price-->
+                                    <div class="price">
+                                        {% if p.firstPrice %}
+                                        <span class="text-decoration-line-through">{{ p.firstPrice }}</span>
+                                        {% endif %}
+                                        <span class="text-danger">{{ p.lastPrice }} Fcfa</span>
+                                    </div>
+                                    <!-- Product name-->
+                                    <p>{{ p.name }}</p>
+                                    <div class="map"><i class="fas fa-map-marker-smile fa-sm"></i> {{ p.shop.city.name }}, {{ p.shop.district }}</div>
+                                </div>
+                            </a>
+                            <!-- Product actions-->
+                            <div class="card-footer border-top-0 bg-transparent">
+                                <a class="btn btn-outline-dark btn-sm mt-auto w-100" href="{{ path('app_shop_show', {'shopId' : p.shop.id, 'citySlug' : p.shop.city.slug, 'shopSlug' : p.shop.slug, 'categorySlug' : p.shop.category.slug}) }}">
+                                    <div class="f-action">
+                                        <span>
+                                            Visiter la boutique 
+                                        </span> 
+                                        <i class="fal fa-arrow-right fa-sm"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}{% endfor %}
+                    </div>
+                </div>
+            {% else %}
+            <div class="text-center py-5 my-5">
+                <h5 class="text-info">Aucun produit pour l'instant.</h5>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}

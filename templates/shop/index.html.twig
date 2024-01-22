@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+{% block title %}{% for s in shop %}Boutique - {{ s.category.name }}{% endfor %}{% endblock %}
+
+{% block body %}
+<!-- Shop header -->
+{% for s in shop %}
+<header class="shop-hero">
+    <div  class="carousel-inner cover-header" style="background-image: url('{{ asset('build/images/upload/shop/' ~ s.shopPictureName) }}');">
+        <div class="cover-info" style="background-image: url('/build/images/home_cover/2.png');">
+            <h1 class="fw-bolder text-white">{{ s.name }}</h1>
+            <div class="d-none d-sm-block text-white-50">
+                <i class="fas fa-store-alt"></i> {{ s.category.name }} -- 
+                <i class="fas fa-map-marker-smile"></i> {{ s.city.name }}, {{ s.district }}
+            </div>
+            <div class="d-block d-sm-none">
+                <div class="text-white-50">
+                    <i class="fas fa-store-alt fa-sm"></i> {{ s.category.name }}
+                </div> 
+                <div class="text-white-50 mb-1">
+                    <i class="fas fa-map-marker-smile fa-sm"></i> {{ s.city.name }}, {{ s.district }}
+                </div> 
+            </div> 
+        </div>
+    </div>
+    <div class="shop-action">
+        <a class="btn text-white btn-success" href="https://wa.me/+237{{ s.contact }}?text={{ app.request.uri}}"><i class="fab fa-whatsapp me-2"></i>Whatsapp du vendeur</a>
+    </div>
+</header><!--End shop header-->
+<main class="flex-shrink-0 mb-5">
+    <!-- Shop product list-->
+    <div class="container">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-5 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Nos produits</h1>
+            <a class="btn btn-primary btn-sm" href="whatsapp://send?text={{ app.request.uri}}" data-action="share/whatsapp/share"><i class="fal fa-share-alt fa-sm"></i> Partager</a>
+        </div>
+            <div class="product">
+                <div class="product-card">
+                    {% for p in s.products %}{% if p.onSale %}
+                    <div class="card shadow">
+                        <a class="item-link" href="{{ path('app_product_detail', {'categorySlug' : p.sousCategory.slug, 'productSlug' : p.slug, 'productId': p.id, 'shopSlug': p.shop.slug, 'cityId' : p.shop.city.id}) }}">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark">{% if p.firstPrice %}Solde{% endif %}</div>
+                            <!-- Product image-->
+                            <img class="card-img-top" src="{% for picture in p.images[:1] %}{{ asset('build/images/upload/product/' ~ picture.urlName) }}{% endfor %}" alt="image_{{ p.name }}" />
+                            <!-- Product details-->
+                            <div class="card-body pb-1">
+                                <!-- Product price-->
+                                <div class="price">
+                                    {% if p.firstPrice %}
+                                    <span class="text-decoration-line-through">{{ p.firstPrice }}</span>
+                                    {% endif %}
+                                    <span class="text-danger">{{ p.lastPrice }} Fcfa</span>
+                                </div>
+                                <!-- Product name-->
+                                <p>{{ p.name }}</p>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}{% endfor %}
+                </div>
+            </div>
+    </div><!--End shop product list-->
+</main>
+{% endfor %}
+{% endblock %}

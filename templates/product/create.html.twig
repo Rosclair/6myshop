@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'un produit{% endblock %}
+
+{% block body %}
+<main class="flex-shrink-0 mb-5">
+  <!-- Header-->
+  <header class="bg-dark mb-5">
+    <div class="py-5">
+      <div class="text-center">
+          <h1 class="fw-bolder text-white m-0">Création d'un produit !</h1>
+      </div>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="col-md-7 m-auto col-lg-8">
+      {{ form_start(productForm) }}
+        <div class="needs-validation row g-3">
+
+          <div class="col-12">
+            <label for="product_name" class="form-label">Boutique</label>
+            <div class="input-group has-validation">
+              {{form_widget(productForm.shop)}}
+              <div class="invalid-feedback">
+                {{form_errors(productForm.shop)}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="product_name" class="form-label">Nom *</label>
+            {{form_widget(productForm.name)}}
+            <div class="invalid-feedback">
+              {{form_errors(productForm.name)}}
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <label for="product_quantity" class="form-label">Quantité *</label>
+            <div class="input-group has-validation">
+              {{form_widget(productForm.quantity)}}
+              <div class="invalid-feedback">
+                {{form_errors(productForm.quantity)}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <label for="product_sousCategory" class="form-label">Categorie *</label>
+            {{form_widget(productForm.sousCategory)}}
+            <div class="invalid-feedback">
+                {{form_errors(productForm.sousCategory)}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="product_firstPrice" class="form-label">Prix barré(si Solde)</label>
+            {{form_widget(productForm.firstPrice)}}
+            <div class="invalid-feedback">
+              {{form_errors(productForm.firstPrice)}}.
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="product_lastPrice" class="form-label">Prix de vente *</label>
+            {{form_widget(productForm.lastPrice)}}
+            <div class="invalid-feedback">
+              {{form_errors(productForm.lastPrice)}}.
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="product_priceOfShip" class="form-label">Prix de livraison</label>
+            {{form_widget(productForm.priceOfShip)}}
+            <div class="invalid-feedback">
+              {{form_errors(productForm.priceOfShip)}}.
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label for="product_description" class="form-label">Description *</label>
+            <div class="mb-3 small text-muted px-2">
+                C’est la partie la plus importante de votre annonce, alors soignez-la !
+            </div>
+            {{form_widget(productForm.description)}}
+            <div class="invalid-feedback">
+              {{form_errors(productForm.description)}}.
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label" for="product_images">Images du produit *</label>
+            <div class="mb-3 px-2">
+                <p class='small text-muted'>La première image sera utilisée dans la recherche et les details de votre annonce. C’est la plus importante, doit être carée. Les autres images, optionnelles, serviront à montrer votre produit ou illustrer plus précisément ce que vous vendez.</p>
+            </div>
+
+            {% if productForm.vars.data.images %}
+              <div class="row">
+              {% for image in productForm.vars.data.images %}
+                <div class="col-sm-3 mb-3">
+                  <img src="{{ asset('build/images/upload/product/' ~ image.urlName) }}" height="150" />
+                  <a href="{{ path('app_product_delete_image', {'id': image.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ image.id) }}"><span class="small text-danger p-3"><i class="fas fa-trash-alt fa-sm"></i> Supprimer</span></a>
+                </div>
+              {% endfor %}
+              </div>
+            {% endif %}
+
+            {{ form_widget(productForm.images)}}
+              <div class="invalid-feedback">
+                {{form_errors(productForm.images)}}.
+              </div>
+          </div>
+
+        </div>
+        <div class="col-12 text-center mt-4">
+          <div class="form-group">
+            <input type="submit" class="btn login-btn">
+          </div>
+        </div>
+      {{ form_end(productForm) }}
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% include 'partials/delete_picture.html.twig' %}
+{% endblock %}

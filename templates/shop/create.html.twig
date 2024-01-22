@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'une boutique{% endblock %}
+
+{% block body %}
+<main class="flex-shrink-0 mb-5">
+  <!-- Header-->
+  <header class="bg-dark mb-5">
+    <div class="pb-5">
+      <div class="text-center">
+          <h1 class="fw-bolder text-white m-0">Création d'une boutique !</h1>
+      </div>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="col-md-7 m-auto col-lg-8">
+      {{ form_start(form) }}
+        <div class="needs-validation row g-3 mb-4">
+          <div class="col-12">
+            <div class="form-floating has-validation">
+              {{form_widget(form.name)}}
+              <label for="shop_name">Nom:</label>
+              <div class="invalid-feedback">
+                {{form_errors(form.name)}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-floating has-validation">
+              {{form_widget(form.contact)}}
+              <label for="shop_contact">Numéro Whatssap:</label>
+              <div class="invalid-feedback">
+                {{form_errors(form.contact)}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-floating has-validation">
+              {{form_widget(form.district)}}
+              <label for="shop_district">Localisation:</label>
+              <div class="invalid-feedback">
+                  {{form_errors(form.district)}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating has-validation">
+              {{form_widget(form.category)}}
+              <label for="shop_category">Categorie:</label>
+              <div class="invalid-feedback">
+                {{form_errors(form.category)}}.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating has-validation">
+              {{form_widget(form.city)}}
+              <label for="shop_city">Ville:</label>
+              <div class="invalid-feedback">
+                {{form_errors(form.city)}}.
+              </div>
+            </div>
+          </div>
+
+        <div class="col-12 py-3">
+          <label class="form-label">Image de couverture de la boutique</label>
+          <div class="mb-3 small text-muted px-2">
+            La qualité de cet image est très importante! elle doit contenir la photo de l'entrée de votre boutique physique, doit être orientée en paysage.
+          </div>
+          <div class="row">
+            {% if form.vars.data.shopPictureName %}
+              <div class="mb-3">
+                <img src="{{ asset('build/images/upload/shop/' ~ form.vars.data.shopPictureName) }}" height="100" />
+                <a href="{{ path('app_shop_delete_image', {'id': form.vars.data.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ form.vars.data.id) }}" data-delete data-token="{{ csrf_token('delete' ~ form.vars.data.id) }}"><span class="small text-danger p-3"><i class="fas fa-trash-alt fa-sm"></i> Supprimer</span></a>
+              </div>
+            {% endif %}
+            {{form_row(form.shopPictureFile)}}
+          </div>
+        </div>
+        <div class="col-12 text-center">
+          <div class="form-group">
+              <input type="submit" class="btn btn-primary text-white w-50">
+          </div>
+        </div>
+      {{ form_end(form) }}
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% include 'partials/delete_picture.html.twig' %}
+{% endblock %}

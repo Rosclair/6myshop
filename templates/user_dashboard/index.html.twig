@@ -1,0 +1,315 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord !{% endblock %}
+
+{% block body %}
+    <main class="flex-shrink-0 mb-5">
+        <div class="container">
+            <div class="py-4 mb-3 border-bottom d-flex align-items-center justify-content-between">
+                <h1 class="h4">Tableau de bord</h1>
+                <a href="{{ path('app_shop_create') }}" class="d-block d-sm-none btn btn-sm btn-primary shadow-sm"><i class="fas fa-store-alt"></i> Créer une boutique</a>
+            </div>
+            {% if app.user and app.user.isVerified == false %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                <div class="container">
+                    <div class="alert-message">
+                        <strong>Votre compte n'est pas activé</strong>, <a href="{{ path('resend_verif') }}">renvoyer le lien d'activation</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% for label, messages in app.flashes %}
+            <div class="alert alert-{{ label }}">
+                {% for message in messages %}
+                    <p class="mb-0">{{ message|raw }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <div class="row">
+                <!-- profil -->
+                <div class="col-12 col-md-4 mx-auto">
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-dark bg-gradient text-white py-2">
+                            <h6 class="m-0 font-weight-bold"><i class="fas fa-user fa-sm"></i> Profil</h6>
+                        </div>
+                        <div class="card-body">
+                            {% if app.user %}
+                            <p><span class="text-muted">Plan: </span>{% if is_granted('ROLE_SHOP_ADMIN') %}<span class="badge bg-gradient bg-success">Premium</span>{% else %}<span class="badge bg-info">Standart</span>{% endif %}</p>
+                            <p><span class="text-muted">Email: </span>{{ app.user.email }}</p>
+                            <p><span class="text-muted">Noms: </span>{{ app.user.fullname }}</p>
+                            <p><span class="text-muted">Mot de passe: </span>**********</p>
+                            <div class="text-center">
+                                <a class="btn btn-sm btn-primary bg-gradient" href="{{ path('app_passwordUpdate', {'email': app.user.email}) }}">Modifier mon mot de passe</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div><!-- End Profil -->
+
+                <div class="col-12 col-md-8">
+
+                    <!-- Shop list -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-dark bg-gradient text-white py-2">
+                            <h6 class="m-0 font-weight-bold"><i class="fas fa-store-alt fa-sm"></i> Boutiques</h6>
+                        </div>
+                        <div class="card-body p-1">
+                            <table class="table table-sm">
+                            <tbody>
+                                {% for s in shops %}
+                                {% if s.shopValidation %}
+                                <tr id="block_{{s.id}}">
+                                    <td class="border-0">
+                                        <div class="d-flex gap-3">
+                                            <img src="{{ asset('build/images/upload/shop/' ~ s.shopPictureName) }}" alt="image_coverture_boutique" width="42" height="42" class="rounded-circle flex-shrink-0">
+                                            <div class="small">
+                                                <h6 class="mb-0">{{ s.name}}</h6>
+                                                <div class="mb-0 text-muted">
+                                                    {% if s.shopValidation.updatedAt > s.updatedAt %}
+                                                        Statut: {% if s.shopValidation.decision == "Rejeter" %}<span class="badge bg-danger">{{ s.shopValidation.decision }}</span> en savoir plus <a class="text-white-80" href="#"  data-bs-toggle="modal" data-bs-target="#validationModal_{{s.shopValidation.id}}">ICI</a>{% else %}<span class="badge bg-success">{{ s.shopValidation.decision }}</span>{% endif %}
+                                                    {% else %}
+                                                        Statut: <span class="badge bg-info">En attente de validation</span>
+                                                    {% endif %}
+                                                    <!-- Validation Modal-->
+                                                    <div class="modal fade" id="validationModal_{{s.shopValidation.id}}" tabindex="-1" aria-labelledby="validationModal_{{s.shopValidation.id}}" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title text-danger">Validation rejeter</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p>{{ s.shopValidation.description }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="d-none d-sm-block py-3 border-0"><a href="{{ path('app_product_create', {'shopSlug' : s.slug, 'categoryId' : s.category.id}) }}"><i class="fab fa-product-hunt"></i> Nouveau produit</a></td>
+                                    <!--action-->
+                                    <td class="py-3 border-0">        
+                                        <div class="dropdown text-end">
+                                            <a href="#" class=" btn-sm btn-outline-primary p-1" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="21" width="21" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                                                </svg>
+                                            </a>
+                                            <ul class="dropdown-menu p-1" aria-labelledby="dropdownUser1">
+                                                {% if s.shopValidation and s.shopValidation.decision == "Publier" %}
+                                                <li class="d-block d-sm-none"><a class="dropdown-item" href="{{ path('app_product_create', {'shopSlug' : s.slug, 'categoryId' : s.category.id}) }}"><span class="text-primary"><i class="fab fa-product-hunt fa-sm"></i> Nouveau produit</a></li>
+                                                {% endif %}
+                                                <li>
+                                                    <a class="dropdown-item" 
+                                                        href="{{ path('app_shop_show', {'shopId' : s.id, 'citySlug' : s.city.slug, 'shopSlug' : s.slug, 'categorySlug' : s.category.slug}) }}">
+                                                        <span class="text-success"><i class="fas fa-eye fa-sm"></i> Visualiser</span>
+                                                    </a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="{{ path('app_shop_edit', {'shopSlug': s.slug, 'id': s.id }) }}"><span class="text-primary"><i class="fas fa-file-edit fa-sm"></i> Éditer</span></a></li>
+                                                <li><a class="dropdown-item" data-action="delete" data-target="#block_{{s.id}}" href="{{ path('app_shop_delete', {'shop': s.id}) }}"><span class="text-danger"><i class="fas fa-trash-alt fa-sm"></i> Supprimer</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr id="block_{{s.id}}">
+                                    <td class="border-0">
+                                        <div class="d-flex gap-3">
+                                            <img src="{{ asset('build/images/upload/shop/' ~ s.shopPictureName) }}" alt="image_coverture_boutique" width="42" height="42" class="rounded-circle flex-shrink-0">
+                                            <div class="small">
+                                                <h6 class="mb-0">{{ s.name}}</h6>
+                                                <div class="mb-0 text-muted">
+                                                    Statut: <span class="badge bg-info">En attente de validation</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="d-none d-sm-block py-3 border-0"><a href="{{ path('app_product_create', {'shopSlug' : s.slug, 'categoryId' : s.category.id}) }}"><i class="fab fa-product-hunt"></i> Nouveau produit</a></td>
+                                    <!--action-->
+                                    <td class="py-3 border-0">        
+                                        <div class="dropdown text-end">
+                                            <a href="#" class=" btn-sm btn-outline-primary p-1" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="21" width="21" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                                                </svg>
+                                            </a>
+                                            <ul class="dropdown-menu p-1" aria-labelledby="dropdownUser1">
+                                                {% if s.shopValidation %}{% for v in s.shopValidation|reverse[:1] %}{% if s.shopValidation.decision == "Publier" %}
+                                                <li class="d-block d-sm-none"><a class="dropdown-item" href="{{ path('app_product_create', {'shopSlug' : s.slug, 'categoryId' : s.category.id}) }}"><span class="text-primary"><i class="fab fa-product-hunt fa-sm"></i> Nouveau produit</a></li>
+                                                {% endif %}{% endfor %}{% endif %}
+                                                <li>
+                                                    <a class="dropdown-item" 
+                                                        href="{{ path('app_shop_show', {'shopId' : s.id, 'citySlug' : s.city.slug, 'shopSlug' : s.slug, 'categorySlug' : s.category.slug}) }}">
+                                                        <span class="text-success"><i class="fas fa-eye fa-sm"></i> Visualiser</span>
+                                                    </a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="{{ path('app_shop_edit', {'shopSlug': s.slug, 'id': s.id }) }}"><span class="text-primary"><i class="fas fa-file-edit fa-sm"></i> Éditer</span></a></li>
+                                                <li><a class="dropdown-item" data-action="delete" data-target="#block_{{s.id}}" href="{{ path('app_shop_delete', {'shop': s.id}) }}"><span class="text-danger"><i class="fas fa-trash-alt fa-sm"></i> Supprimer</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                            </table>
+                        </div>
+                    </div><!-- End Shop list -->
+
+                    <!-- Product list -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-dark bg-gradient text-white py-2">
+                            <h6 class="m-0 font-weight-bold"><i class="fab fa-product-hunt fa-sm"></i> Produits</h6>
+                        </div>
+                        <div class="card-body p-2">
+                            <table class="table table-striped" id="datatable" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>En vente</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for p in products %}
+                                    <tr id="block_{{p.id}}">
+                                        <!--names-->
+                                        <td>
+                                            <div class="d-flex align-items-center small">
+                                                <img src="{% for picture in p.images[:1] %}{{ asset('build/images/upload/product/' ~ picture.urlName) }}{% endfor %}" alt="image_produit_{{p.name}}" width="30" height="30">
+                                                <div class="text-start p-2">
+                                                    <h6 class="mb-0">{{p.name}}</h6>
+                                                    <p class="small text-muted m-0">Qté: {{p.quantity}} pièces <a href="#" class="p-2" data-bs-toggle="modal" data-bs-target="#detailModal_{{p.id}}"><i class="far fa-file-alt fa-sm"></i> Détail</a></p>
+                                                    <!-- Detail Modal-->
+                                                    <div class="modal fade" id="detailModal_{{p.id}}" tabindex="-1" aria-labelledby="detailModal_{{p.id}}" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Informations suplementaire</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <table class="table table-sm">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <th>Boutique:</th>
+                                                                                <td>{{p.shop}}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Prix-barré:</th>
+                                                                                <td>{{p.firstPrice}} FCFA</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Dernier prix:</th>
+                                                                                <td>{{p.lastPrice}} FCFA</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Livraison:</th>
+                                                                                <td>{{p.priceOfShip}} FCFA</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Categorie:</th>
+                                                                                <td>{{p.sousCategory}}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Solde:</th>
+                                                                                <td>{% if p.firstPrice %}Oui{% else %}Non{% endif %}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Descroption:</th>
+                                                                                <td>{{p.description}}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Dépuis:</th>
+                                                                                <td>{{ p.createdAt|format_datetime('medium', 'none', locale='fr') }}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <button class="btn btn-secondary text-white" type="button" data-bs-dismiss="modal" aria-label="Close">
+                                                                        <i class="fas fa-times fa-fw"></i>
+                                                                        Quitter
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <!--On sale-->
+                                        <td align="center" valign="middle">
+                                            <div class="form-check form-switch p-0 mx-auto w-25">
+                                                <input class="form-check-input js-onSale mx-auto" type="checkbox" id="flexSwitchCheck_{{p.id}}" value="{{ path('app_product_sale', {'id' : p.id, 'shopSlug' : p.shop.slug}) }}" {% if p.onSale %}checked{% endif %}>
+                                            </div>
+                                        </td>
+                                        <!--action-->
+                                        <td align="center" valign="middle">
+                                            <div class="dropdown">
+                                                <a href="#" class=" btn-sm btn-outline-primary p-1" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="21" width="21" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                                                    </svg>
+                                                </a>
+                                                <ul class="dropdown-menu p-1" aria-labelledby="dropdownUser1">
+                                                    <li>
+                                                        <a class="dropdown-item" 
+                                                            href="{{ path('app_product_detail', {'categorySlug' : p.sousCategory.slug, 'productSlug' : p.slug, 'productId': p.id, 'shopSlug': p.shop.slug, 'cityId' : p.shop.city.id}) }}">
+                                                            <span class="text-success"><i class="fas fa-eye fa-sm"></i> Visualiser</span>
+                                                        </a>
+                                                    </li>
+                                                    <li><a class="dropdown-item" href="{{ path('app_product_edit', {'shopSlug' : p.shop.slug, 'categoryId' : p.shop.category.id, 'slug': p.slug, 'id': p.id}) }}"><span class="text-primary"><i class="fas fa-file-edit fa-sm"></i> Éditer</span></a></li>
+                                                    <li><a class="dropdown-item" data-action="delete" data-target="#block_{{p.id}}" href="{{ path('app_product_delete', {'product': p.id}) }}"><span class="text-danger"><i class="fas fa-trash-alt fa-sm"></i> Supprimer</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!-- End Product list -->
+                </div>
+            </div>                
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('build/scripts/user_dashboard.js') }}"></script>
+<script>
+    let links = document.querySelectorAll('[data-action="delete"]');
+
+    // On boucle sur les liens
+    for(let link of links){
+    // On met un écouteur d'évènements
+    link.addEventListener("click", function(e){
+        // On empêche la navigation
+        e.preventDefault();
+        // On demande confirmation
+        if(confirm("Êtes vous sûr de vouloir supprimer cet enregistrement ?")){
+            // On envoie la requête ajax
+            const url = this.getAttribute("href");
+            const target = this.dataset.target;
+            $.ajax({
+                url : url,
+                type : "GET",
+                dataType : "json"
+            }).done(function(response){
+            if(response.success){
+            $(target).remove();
+            }else{
+            alert(response.error);
+            }
+        })
+        }
+    })
+    }
+</script>
+{% endblock %}

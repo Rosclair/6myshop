@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}6myshop -- Changement de plan {% endblock %}
+
+{% block body %}
+    <main class="flex-shrink-0 pb-5">
+        <!-- Header-->
+        <header class="bg-dark mb-5">
+            <div class="pb-5">
+                <div class="text-center">
+                    <h1 class="fw-bolder text-white m-0">Nos plans !</h1>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+
+            {% for label, messages in app.flashes %}
+            <div class="container p-0">
+                <div class="alert alert-{{ label }}">
+                    {% for message in messages %}
+                        <p class="mb-0 text-center text-danger">{{ message|raw }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Pricing section-->
+            <div class="text-center mb-5">
+                <h2 class="fw-bolder">Avec nos plans tarifaires sans tracas</h2>
+                <p class="lead fw-normal text-muted mb-0"></p>
+            </div>
+            <div class="row gx-lg-5 justify-content-center">
+                <!-- Pricing card free-->
+                <div class="col-lg-6 col-xl-5">
+                    <div class="card shadow mb-5 mb-xl-0">
+                        <div class="card-body p-5">
+                            <div class="small text-uppercase fw-bold text-muted">Standard
+                            </div>
+                            <div class="mb-3">
+                                <span class="display-4 fw-bold">0 cfa</span>
+                                <span class="text-muted">/ an.</span>
+                            </div>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2">
+                                    <i class="far fa-check text-primary"></i>
+                                    <strong>1 boutique</strong>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="far fa-check text-primary"></i>
+                                    50 produits
+                                </li>
+                            </ul>
+                            <p class="text-muted small"><span class="text-danger">NB</span>: la boutique doit avoir une localisation physique sur le territoire pour être valide et respecter nos conditions d’utilisation.</p>
+                            <div class="d-grid"><a class="btn btn-outline-primary" href="#!">Choisir le plan</a></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pricing card pro-->
+                <div class="col-lg-6 col-xl-5">
+                    <div class="card shadow mb-xl-0">
+                        <div class="card-body p-5">
+
+                            <div class="small text-uppercase fw-bold">
+                                <i class="fas fa-star text-warning"></i>
+                                Premium
+                            </div>
+                            <div class="mb-3">
+                                <span class="display-4 fw-bold">10000 cfa</span>
+                                <span class="text-muted">/ an.</span>
+                            </div>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2">
+                                    <i class="far fa-check text-primary"></i>
+                                    <strong>Boutiques illimitées</strong>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="far fa-check text-primary"></i>
+                                    Produits illimités
+                                </li>
+                                <li class="mb-2">
+                                    <i class="far fa-check text-primary"></i>
+                                    Deux semaines de campagne publicitaire
+                                </li>
+                                <li class="mb-2">
+                                    <i class="far fa-check text-primary"></i>
+                                    Une assistance technique 24h/24
+                                </li>
+                            </ul>
+                            <p class="text-muted"><span class="text-danger">Important</span>: Le paiement n’étant pas automatisé pour l’instant, il se fera via OM <strong>698637315</strong> ou MOMO  <strong>679742319</strong> (Nom <strong>Ngagoum Noune Rostand Duclair</strong>). Confirmer votre transaction en nous envoyant une capture ou en transférant le message de confirmation recu et votre plan sera mise à jour aussitôt.</p>
+                            <p class="text-muted small"><span class="text-danger">NB</span>: Chaque boutique doit avoir une localisation physique sur le territoire pour être valide et respecter nos conditions d’utilisation.</p>
+                            <div class="d-grid"><a class="btn btn-success bg-gradient" href="https://wa.me/+237698637315?text=Demande de mise à niveau de mon plan standard actuel pour un plan vendeur. Email: {{ app.user.email }}, Utilisateur: {{ app.user.fullname }}."><i class="fab fa-whatsapp"></i> Confirmer</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

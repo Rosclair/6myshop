@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('build/styles/carousel.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block title %}6myshop{% endblock %}
+
+{% block body %}
+    <!-- Masthead-->
+    <section class="masthead">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-5 d-flex align-items-center">
+                    <div class="">
+                        <div class="masthead-subheading">Trouve et Achète facilement !</div>
+                        <div class="masthead-heading">Des produits de boutiques de ta ville en un point</div>
+                    </div>
+                </div>
+                <!-- Shop -->
+                <div class="col-lg-6">
+                    <div class="owl-carousel owl-theme">
+                        {% for s in shops[:5] %}
+                        <div class="card masthead-carousel">
+                            <a href="{{ path('app_shop_show', {'shopId' : s.id, 'citySlug' : s.city.slug, 'shopSlug' : s.slug, 'categorySlug' : s.category.slug}) }}">
+                            <!-- cover image -->
+                            <img class="card-img-top" src="{{ asset('build/images/upload/shop/' ~ s.shopPictureName) }}" alt="image_{{ s.name }}" />
+                            <!--card body -->
+                            <div class="card-body">
+                                <h2 class="card-title text-muted">{{ s.name }}</h2>
+                                <div class="text-muted">
+                                    <div class="mb-2"><i class="fas fa-store-alt fa-sm"></i> Boutique: {{ s.category.name }}</div>
+                                    <div><i class="fas fa-map-marker-smile fa-sm"></i> {{ s.city.name }}, {{ s.district }}</div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div><!-- Boutiques-->
+            </div>
+        </div>
+    </section><!-- End Masthead-->
+
+    <main class="flex-shrink-0 mb-5">
+        <!-- Product list-->
+        <div class="container">
+            <h2 class="h-3 pt-5 pb-4"><span class="text-gradient d-inline">Annonces</span></h2>
+            <div class="product">
+                <div class="product-card">
+                    {% for p in products %}{% if p.onSale %}
+                    <div class="card shadow">
+                        <a class="item-link" href="{{ path('app_product_detail', {'categorySlug' : p.sousCategory.slug, 'productSlug' : p.slug, 'productId': p.id, 'shopSlug': p.shop.slug, 'cityId' : p.shop.city.id}) }}">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark">{% if p.firstPrice %}Solde{% endif %}</div>
+                            <!-- Product image-->
+                            <img class="card-img-top" src="{% for picture in p.images[:1] %}{{ asset('build/images/upload/product/' ~ picture.urlName) }}{% endfor %}" alt="image_{{ p.name }}" />
+                            <!-- Product details-->
+                            <div class="card-body">
+                                <!-- Product price-->
+                                <div class="price">
+                                    {% if p.firstPrice %}
+                                    <span class="text-decoration-line-through">{{ p.firstPrice }}</span>
+                                    {% endif %}
+                                    <span class="text-danger">{{ p.lastPrice }} Fcfa</span>
+                                </div>
+                                <!-- Product name-->
+                                <p>{{ p.name }}</p>
+                                <div class="map"><i class="fas fa-map-marker-smile fa-sm"></i> {{ p.shop.city.name }}, {{ p.shop.district }}</div>
+                            </div>
+                        </a>
+                        <!-- Product actions-->
+                        <div class="card-footer border-top-0 bg-transparent">
+                            <a class="btn btn-outline-dark btn-sm mt-auto w-100" href="{{ path('app_shop_show', {'shopId' : p.shop.id, 'citySlug' : p.shop.city.slug, 'shopSlug' : p.shop.slug, 'categorySlug' : p.shop.category.slug}) }}">
+                                <div class="f-action">
+                                    <span>
+                                        Visiter la boutique 
+                                    </span> 
+                                    <i class="fal fa-arrow-right fa-sm"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}{% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/scripts/main_carousel.js') }}"></script>
+{% endblock %}

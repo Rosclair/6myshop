@@ -1,0 +1,176 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('build/styles/carousel.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block title %}{% for p in product[:1] %}Détail-{{ p.name }}{% endfor %}{% endblock %}
+
+{% block body %}
+    <main class="flex-shrink-0 mb-5">
+        <div class="container">
+            {% for p in product %}
+            <div class="product-detail-grid">
+                <div class="grid-content">
+                    <div class="img-item">
+                        <div id="sync1" class="owl-carousel pt-3">
+                            {% for picture in p.images %} 
+                                <div class="item"><img src="{{ asset('build/images/upload/product/' ~ picture.urlName) }}" alt="image_{{ p.name }}"></div>
+                            {% endfor %}
+                        </div>
+                        <div id="sync2" class="owl-carousel owl-theme">
+                        {% for picture in p.images %} 
+                            <div class="item"><img src="{{ asset('build/images/upload/product/' ~ picture.urlName) }}" alt="image_{{ p.name }}" alt="image_{{ p.name }}"></div>
+                        {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                        <div class="">
+                            <div class="small mb-1 text-muted">
+                            <i class="fas fa-store-alt fa-sm"></i> {{ p.shop.name }}, 
+                            <i class="fas fa-map-marker-smile fa-sm"></i> {{ p.shop.city.name }}, {{ p.shop.district }}
+                            </div>
+                            <div class="fs-5 mt-4">
+                                {% if p.firstPrice %}<span class="badge bg-danger">Solde</span>{% endif %} {% if p.firstPrice %}<span class="text-decoration-line-through">{{ p.firstPrice }} Fcfa</span>{% endif %}
+                                <span class="text-danger">{{ p.lastPrice }} Fcfa</span>
+                            </div>
+                            <h1 class="display-6 fw-bolder mt-4">{{ p.name }}</h1>
+                            <p class="small fs-5 mb-4">Livraison: {{ p.priceOfShip }} Fcfa</p>
+                            <p class="text-muted mb-4">{{ p.description }}</p>
+                            <div class="row g-4">
+                                <div class="col-6">
+                                    <a class="btn text-white bg-primary w-100" data-bs-toggle="modal" data-bs-target="#callModal" href="#"><i class="fal fa-phone me-2"></i>Appeler</a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="btn text-white bg-success w-100" aria-label="Chat on WhatsApp" data-bs-toggle="modal" data-bs-target="#whatsappModal" href="#"><i class="fab fa-whatsapp me-2"></i> Whatsapp</a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="btn btn-danger text-white w-100" href="#"><i class="fal fa-share-alt fa-sm"></i> Signaler</a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="btn btn-info text-white w-100" href="whatsapp://send?text={{ app.request.uri}}" data-action="share/whatsapp/share"><i class="fal fa-share-alt fa-sm"></i> Partager</a>
+                                </div>
+                            </div>
+                            <!-- Whatsapp Modal-->
+                            <div class="modal fade" id="whatsappModal" tabindex="-1" aria-labelledby="whatsappModal" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header justify-content-center">
+                                            <h5 class="modal-title text-primary"><i class="fas fa-shield-check"></i> NOS CONSEILS DE SÉCURITÉ !</h5>
+                                        </div>
+                                        <div class="modal-body px-5">
+                                            <ul class="list-unstyled text-danger mb-4">
+                                                <li class="mb-2">
+                                                    <i class="far fa-check text-danger"></i>
+                                                    <strong>Exigez un REÇU / FACTURE au vendeur pour tout achat.</strong>
+                                                </li>
+                                                <li class="mb-2">
+                                                    <i class="far fa-check text-danger"></i>
+                                                    <strong>Signalez tout vendeur exigeant une réservation par mobile money.</strong>
+                                                </li>
+                                                <li class="mb-2">
+                                                    <i class="far fa-check text-danger"></i>
+                                                    <strong>Évitez de transférer de l’argent même pour des paiements en plusieurs fois.</strong>
+                                                </li>
+                                                <li class="mb-2">
+                                                    <i class="far fa-check text-danger"></i>
+                                                    <strong>Ne payez, sous aucun prétexte, avant d'avoir vu le produit.</strong>
+                                                </li>
+                                            </ul>
+                                            <a class="btn text-white bg-success w-100" data-bs-target="#whatsappModal" href="https://wa.me/+237{{ p.shop.contact }}?text={{ app.request.uri}}"><i class="fab fa-whatsapp me-2"></i> Whatsapp</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Call Modal-->
+                            <div class="modal fade" id="callModal" tabindex="-1" aria-labelledby="callModal" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header justify-content-center">
+                                            <h5 class="modal-title text-primary"><i class="fas fa-shield-check"></i> NOS CONSEILS DE SÉCURITÉ !</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul class="list-unstyled text-danger mb-4">
+                                                <li class="mb-2">
+                                                    <i class="far fa-check text-danger"></i>
+                                                    <strong>Exigez un REÇU / FACTURE au vendeur pour tout achat.</strong>
+                                                </li>
+                                                <li class="mb-2">
+                                                    <i class="far fa-check text-danger"></i>
+                                                    <strong>Signalez tout vendeur exigeant une réservation par mobile money.</strong>
+                                                </li>
+                                                <li class="mb-2">
+                                                    <i class="far fa-check text-danger"></i>
+                                                    <strong>Évitez de transférer de l’argent même pour des paiements en plusieurs fois.</strong>
+                                                </li>
+                                                <li class="mb-2">
+                                                    <i class="far fa-check text-danger"></i>
+                                                    <strong>Ne payez, sous aucun prétexte, avant d'avoir vu le produit.</strong>
+                                                </li>
+                                            </ul>
+                                            <a class="btn text-white bg-primary w-100" href="tel:+237{{ p.shop.contact }}"><i class="fal fa-phone me-2"></i>Appeler</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}        
+
+                    {% if products %}
+                    <div class="other-item mt-5">
+                        <div class=" w-100 bg-dark text-white p-3 mb-3">
+                            <h5 class="m-0">Produits similaires</h5>
+                        </div>
+                        <div class="product px-1">
+                            <div class="product-card">
+                                {% for p in products %}{% if p.onSale %}
+                                <div class="card shadow">
+                                    <a class="item-link" href="{{ path('app_product_detail', {'categorySlug' : p.sousCategory.slug, 'productSlug' : p.slug, 'productId': p.id, 'shopSlug': p.shop.slug, 'cityId' : p.shop.city.id}) }}">
+                                        <!-- Sale badge-->
+                                        <div class="badge bg-dark">{% if p.firstPrice %}Solde{% endif %}</div>
+                                        <!-- Product image-->
+                                        <img class="card-img-top" src="{% for picture in p.images[:1] %}{{ asset('build/images/upload/product/' ~ picture.urlName) }}{% endfor %}" alt="image_{{ p.name }}" />
+                                        <!-- Product details-->
+                                        <div class="card-body">
+                                            <!-- Product price-->
+                                            <div class="price">
+                                                {% if p.firstPrice %}
+                                                <span class="text-decoration-line-through">{{ p.firstPrice }}</span>
+                                                {% endif %}
+                                                <span class="text-danger">{{ p.lastPrice }} Fcfa</span>
+                                            </div>
+                                            <!-- Product name-->
+                                            <p>{{ p.name }}</p>
+                                            <div class="map"><i class="fas fa-map-marker-smile fa-sm"></i> {{ p.shop.city.name }}, {{ p.shop.district }}</div>
+                                        </div>
+                                    </a>
+                                    <!-- Product actions-->
+                                    <div class="card-footer border-top-0 bg-transparent">
+                                        <a class="btn btn-outline-dark btn-sm mt-auto w-100" href="{{ path('app_shop_show', {'shopId' : p.shop.id, 'citySlug' : p.shop.city.slug, 'shopSlug' : p.shop.slug, 'categorySlug' : p.shop.category.slug}) }}">
+                                            <div class="f-action">
+                                                <span>
+                                                    Visiter la boutique 
+                                                </span> 
+                                                <i class="fal fa-arrow-right fa-sm"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                {% endif %}{% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/scripts/product_carousel.js') }}"></script>
+{% endblock %}

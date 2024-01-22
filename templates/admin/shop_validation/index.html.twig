@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration de boutique{% endblock %}
+
+{% block body %}
+    <main class="flex-shrink-0 mb-5">
+        <div class="container">
+            <div class="py-4 mb-3 border-bottom d-flex align-items-center justify-content-between">
+                <h1 class="h2">Admin</h1>
+                <a href="{{ path('app_admin') }}" class="d-block d-sm-none btn btn-sm btn-primary shadow-sm"><i class="fas fa-store-alt"></i> Manager</a>
+            </div>
+
+            {% for label, messages in app.flashes %}
+            <div class="container p-0">
+                <div class="alert alert-{{ label }}">
+                    {% for message in messages %}
+                        <p class="m-0">{{ message|raw }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+        <div class="col-12 col-md-6 mx-auto">
+            <!-- Shop list -->
+            <h5>En attente de validation</h5>
+            <div class="card shadow mb-4">
+                <div class="card-body p-1">
+                    <table class="table table-sm">
+                    <tbody>
+                        {% for s in shopsNoValidate %}
+                        <tr>
+                            <td class="border-0">
+                                <div class="d-flex gap-3">
+                                    <img src="{{ asset('build/images/upload/shop/' ~ s.shopPictureName) }}" alt="twbs" width="42" height="42" class="rounded-circle flex-shrink-0">
+                                    <div class="small">
+                                        <h6 class="mb-0">{{ s.name}}</h6>
+                                        <div class="mb-0 opacity-75">
+                                            {{ s.category.name }}, {{ s.createdAt|format_datetime('medium', 'medium', locale='fr') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <!--action-->
+                            <td class="py-3 border-0">        
+                                <div class="dropdown text-end">
+                                    <a href="#" class=" btn-sm btn-outline-primary p-1" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="21" width="21" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                                        </svg>
+                                    </a>
+                                    <ul class="dropdown-menu p-1" aria-labelledby="dropdownUser1">
+                                        <li>
+                                            <a class="dropdown-item text-small text-success" 
+                                                href="{{ path('app_shop_show', {'shopId' : s.id, 'citySlug' : s.city.slug, 'shopSlug' : s.slug, 'categorySlug' : s.category.slug}) }}">
+                                                <i class="fas fa-eye fa-sm"></i></i> Visualiser
+                                            </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-small text-primary" href="{{ path('app_admin_validation_creat', {'shopSlug': s.slug}) }}"><i class="fas fa-file-edit fa-sm"></i> Créer une décision</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div><!-- End Shop list -->
+        </div>
+        <div class="col-12 col-md-6 mx-auto">
+            <!-- Shop list -->
+            <h5>Rejeter</h5>
+            <div class="card shadow mb-4">
+                <div class="card-body p-1">
+                    <table class="table table-sm">
+                    <tbody>
+                        {% for s in shopsDismiss %}
+                        <tr>
+                            <td class="border-0">
+                                <div class="d-flex gap-3">
+                                    <img src="{{ asset('build/images/upload/shop/' ~ s.shopPictureName) }}" alt="twbs" width="42" height="42" class="rounded-circle flex-shrink-0">
+                                    <div class="small">
+                                        <h6 class="mb-0">{{ s.name}} - {% if s.shopValidation.updatedAt > s.updatedAt %}<i class="far fa-times text-danger"></i>{% else %}<i class="far fa-check text-success"></i>{% endif %}</h6>
+                                        <div class="mb-0 opacity-75">
+                                            {{ s.category.name }}, {{ s.createdAt|format_datetime('medium', 'medium', locale='fr') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <!--action-->
+                            <td class="py-3 border-0">        
+                                <div class="dropdown text-end">
+                                    <a href="#" class=" btn-sm btn-outline-primary p-1" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="21" width="21" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                                        </svg>
+                                    </a>
+                                    <ul class="dropdown-menu p-1" aria-labelledby="dropdownUser1">
+                                        <li>
+                                            <a class="dropdown-item text-small text-success" 
+                                                href="{{ path('app_shop_show', {'shopId' : s.id, 'citySlug' : s.city.slug, 'shopSlug' : s.slug, 'categorySlug' : s.category.slug}) }}">
+                                                <i class="fas fa-eye fa-sm"></i></i> Voir
+                                            </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-small text-primary" href="{{ path('app_admin_validation_edit', {'shopSlug': s.slug, 'id' : s.shopValidation.id}) }}"><i class="fas fa-file-edit fa-sm"></i> Modifier la décision</a></li>
+                                        <li><a class="dropdown-item text-danger text-small" href="#"><i class="fas fa-trash-alt fa-sm"></i> Supprimer</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% for s in shopReEdit %}
+                        {% if s.shopValidation.updatedAt < s.updatedAt %}
+                        <tr>
+                            <td class="border-0">
+                                <div class="d-flex gap-3">
+                                    <img src="{{ asset('build/images/upload/shop/' ~ s.shopPictureName) }}" alt="twbs" width="42" height="42" class="rounded-circle flex-shrink-0">
+                                    <div class="small">
+                                        <h6 class="mb-0">{{ s.name}} - {% if s.shopValidation.updatedAt > s.updatedAt %}<i class="far fa-times text-danger"></i>{% else %}<i class="far fa-check text-success"></i>{% endif %}</h6>
+                                        <div class="mb-0 opacity-75">
+                                            {{ s.category.name }}, {{ s.createdAt|format_datetime('medium', 'medium', locale='fr') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <!--action-->
+                            <td class="py-3 border-0">        
+                                <div class="dropdown text-end">
+                                    <a href="#" class=" btn-sm btn-outline-primary p-1" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="21" width="21" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                                        </svg>
+                                    </a>
+                                    <ul class="dropdown-menu p-1" aria-labelledby="dropdownUser1">
+                                        <li>
+                                            <a class="dropdown-item text-small text-success" 
+                                                href="{{ path('app_shop_show', {'shopId' : s.id, 'citySlug' : s.city.slug, 'shopSlug' : s.slug, 'categorySlug' : s.category.slug}) }}">
+                                                <i class="fas fa-eye fa-sm"></i></i> Voir
+                                            </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-small text-primary" href="{{ path('app_admin_validation_edit', {'shopSlug': s.slug, 'id' : s.shopValidation.id}) }}"><i class="fas fa-file-edit fa-sm"></i> Modifier la décision</a></li>
+                                        <li><a class="dropdown-item text-danger text-small" href="#"><i class="fas fa-trash-alt fa-sm"></i> Supprimer</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div><!-- End Shop list -->
+        </div>
+        </div>
+    </main>
+{% endblock %}

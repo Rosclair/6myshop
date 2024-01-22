@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact!{% endblock %}
+
+{% block body %}
+    <main style="background-color: #212529; background-image: url('{{ asset('build/images/map-image.png') }}'); background-repeat: no-repeat; background-position: center;">
+        <div class="container">
+            <!-- Contact form-->
+            <div class="rounded-3 py-4 mb-5">
+                <div class="text-center text-white mb-4">
+                    <h1 class="fw-bolder">Entrer en contact</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Nous aimerions recevoir de vos nouvelles</p>
+                </div>
+                <div class="">
+                    <div class="">
+                        {{ form_start(form) }}
+                        <div class="row align-items-stretch mb-4">
+                            <div class="col-md-6">
+                                <!-- Name input-->
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.name) }}
+                                    <label for="contact_name">Noms et Prénoms *</label>
+                                </div>
+                                <!-- Email address input-->
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.email) }}
+                                    <label for="contact_email">Email *</label>
+                                </div>
+                                <!-- Phone number input-->
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.phone) }}
+                                    <label for="contact_phone">Numéro de téléphone *</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating form-group form-group-textarea mb-md-0">
+                                    {{ form_widget(form.message) }}
+                                    <label for="contact_message">Votre méssage *</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Submit Button-->
+                        <div class="text-center"><button class="btn btn-primary text-uppercase" id="submitButton" type="submit">Soumettre</button></div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

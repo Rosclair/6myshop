@@ -1,0 +1,43 @@
+<header id="header" class="fixed-top d-flex align-items-center">
+  <div class="container d-flex justify-content-between">
+
+    <div class="logo">
+      <a href="{{ path('app_main') }}"><img src="{{ asset('build/images/logo/6myshop-logo.png') }}" alt="logo" class="img-fluid"></a>
+    </div>
+
+    <!-- Navigation-->
+    <nav id="navbar" class="navbar">
+      <ul>
+        {% if app.user %}
+        <li><a class="nav-link scrollto" href="{{ path('app_user_dashboard') }}">Tableau de bord</a></li>
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <li><a class="nav-link scrollto" href="{{ path('app_admin_validation') }}">Administration</a></li>
+        <li><a class="nav-link scrollto" href="{{ path('app_admin') }}">Manager</a></li>
+        {% endif %}
+        <li><a class="nav-link scrollto" href="{{ path('app_shop_create') }}">Créer une boutique</a></li>
+        {% endif %}
+        <li class="dropdown"><a href="#"><span>Categories</span> <i class="fas fa-caret-down"></i></a>
+          <ul>
+            {% for c in categories %}
+            <li class="dropdown"><a href="#"><span>{{ c.name }}</span> <i class="fas fa-caret-down"></i></a>
+              <ul>
+                {% for sc in c.category %}
+                <li><a href="{{ path('app_catList', {'categoryId' : sc.id, 'categorySlug': sc.slug }) }}">{{ sc.name }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% if app.user %}
+        <li><a class="nav-link scrollto" href="{{ path('app_logout') }}">Déconnexion</a></li>
+        {% else %}
+        <li><a class="nav-link scrollto" href="{{ path('app_login') }}">Connexion</a></li>
+        <li><a class="nav-link scrollto" href="{{ path('app_registration') }}">Inscription</a></li>
+        {% endif %}
+      </ul>
+      <i class="fal fa-bars mobile-nav-toggle"></i>
+    </nav>
+    <!-- End Nav -->
+  </div>
+</header><!-- End Header -->
