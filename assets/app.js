@@ -1,19 +1,11 @@
-//import './bootstrap.js';
-/*
- * Welcome to your app's main JavaScript file!
- *
- * This file will be included onto the page via the importmap() Twig function,
- * which should already be in your base.html.twig.
- */
 import './styles/app.scss';
-
 
 "use strict";
 
-// require jQuery normally
+/* require jQuery normally */
 const $ = require('jquery');
 
-// create global $ and jQuery variables
+/* create global $ and jQuery variables */
 global.$ = global.jQuery = $;
 
 import { Tooltip, Toast, Popover } from 'bootstrap';
@@ -22,7 +14,6 @@ require ('owl.carousel');
 import DataTable from 'datatables.net-bs5';
 
 (function() {
-  "use strict";
 
   new DataTable('#datatable', {
     ordering: false,

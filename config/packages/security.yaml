@@ -42,9 +42,9 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        # - { path: ^/tableau_de_bord, roles: ROLE_USER }
-        # - { path: ^/@manager, roles: ROLE_SUPER_ADMIN }
-        # - { path: ^/admin/validation, roles: ROLE_SUPER_ADMIN }
+         - { path: ^/tableau_de_bord, roles: ROLE_USER }
+         - { path: ^/@manager, roles: ROLE_SUPER_ADMIN }
+         - { path: ^/admin/validation, roles: ROLE_SUPER_ADMIN }
 
 when@test:
     security:

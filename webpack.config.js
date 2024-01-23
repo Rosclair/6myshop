@@ -27,6 +27,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    //.addEntry('scripts/datatables', './assets/scripts/datatables.js')
     .addEntry('scripts/registration', './assets/scripts/registration.js')
     .addEntry('scripts/main_carousel', './assets/scripts/main_carousel.js')
     .addEntry('scripts/user_dashboard', './assets/scripts/user_dashboard.js')

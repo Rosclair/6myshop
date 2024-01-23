@@ -28,12 +28,15 @@ class Shop
     use SlugTrait;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank()]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank()]
     private ?int $contact = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank()]
     private ?string $district = null;
 
     #[ORM\Column(length: 255)]

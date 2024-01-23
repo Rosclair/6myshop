@@ -23,9 +23,11 @@ class Product
     use UpdatedAtTrait;
     use SlugTrait;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -38,6 +40,7 @@ class Product
     #[ORM\Column]
     private ?int $lastPrice = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column]
     private ?int $quantity = null;
 
@@ -63,7 +66,6 @@ class Product
     {
         $this->images = new ArrayCollection();
     }
-
 
     /**
      * Permet d'initialiser le slug et la date de creation et de mise a jour!

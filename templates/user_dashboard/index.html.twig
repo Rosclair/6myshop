@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('build/styles/datatables.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
 {% block title %}Tableau de bord !{% endblock %}
 
 {% block body %}
@@ -167,12 +172,12 @@
                             <h6 class="m-0 font-weight-bold"><i class="fab fa-product-hunt fa-sm"></i> Produits</h6>
                         </div>
                         <div class="card-body p-2">
-                            <table class="table table-striped" id="datatable" width="100%">
+                            <table class="table table-striped" id="datatable" styles="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Nom</th>
-                                        <th>En vente</th>
-                                        <th>Actions</th>
+                                        <th class="text-center">En vente</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -244,7 +249,7 @@
                                         </td>
                                         <!--On sale-->
                                         <td align="center" valign="middle">
-                                            <div class="form-check form-switch p-0 mx-auto w-25">
+                                            <div class="form-check form-switch p-0 d-flex justify-content-center">
                                                 <input class="form-check-input js-onSale mx-auto" type="checkbox" id="flexSwitchCheck_{{p.id}}" value="{{ path('app_product_sale', {'id' : p.id, 'shopSlug' : p.shop.slug}) }}" {% if p.onSale %}checked{% endif %}>
                                             </div>
                                         </td>

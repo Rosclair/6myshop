@@ -3,9 +3,11 @@
 --------------------------------------------------------------*/
 a {
   text-decoration: none;
+  color: #4e73de;
 }
 a:hover {
   text-decoration: none;
+  color: #4e73de;
 }
 .btn {
   color: #fff;

@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Entity\Trait\UpdatedAtTrait;
 use App\Repository\ShopValidationRepository;
+use Symfony\Component\Validator\Constraints as  Assert;
 
 #[ORM\Entity(repositoryClass: ShopValidationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -31,6 +32,7 @@ class ShopValidation
     #[ORM\JoinColumn(nullable: false)]
     private ?Shop $shop = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 

@@ -14,7 +14,7 @@ $(document).ready(function () {
 });
 
 function checkuser() {
-    var pattern = /^[A-Za-z0-9]+$/;
+    var pattern = /^[A-Za-z0-9 ]+$/;
     var user = $('#registration_fullname').val();
     var validuser = pattern.test(user);
     if ($('#registration_fullname').val().length < 5) {

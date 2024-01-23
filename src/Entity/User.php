@@ -25,11 +25,6 @@ use Rollerworks\Component\PasswordStrength\Validator\Constraints as RollerworksP
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /*#[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;*/
-
     use IdTrait;
     use CreatedAtTrait;
     use UpdatedAtTrait;
